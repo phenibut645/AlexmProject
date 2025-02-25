@@ -1,27 +1,23 @@
-const net = require('net');
+const WebSocket = require('ws');
 
-const server = net.createServer((socket) =>{
-    console.log("client has connected");
+const port = process.env.PORT || 3000;
+const server = new WebSocket.Server({ port });
 
+console.log(`WebSocket сервер запущен на порту ${port}`);
 
-    socket.on('data', (data) => {
-        console.log(`Получены данные: ${data}`);
-        socket.write(`Вы отправили: ${data}`);
-    });
+server.on('connection', (ws) => {
+  console.log('Клиент подключился');
 
-    socket.on('end', () => {
-        console.log('Клиент отключился');
-    });
+  ws.on('message', (message) => {
+    console.log(`Получено сообщение: ${message}`);
+    ws.send(`Эхо: ${message}`);
+  });
 
-    socket.on('error', (err) => {
-        console.error(`Ошибка: ${err}`);
-    });
+  ws.on('close', () => {
+    console.log('Клиент отключился');
+  });
+
+  ws.on('error', (err) => {
+    console.error('Ошибка WebSocket:', err);
+  });
 });
-
-server.listen(process.env.PORT || 3000, ()=>{
-    console.log("server is listening port 3000")
-})
-
-server.on('error', (err) => {
-    console.error(err);
-})
