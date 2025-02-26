@@ -21,20 +21,21 @@ server.on('connection', (ws) => {
     let another_player = null;
     
     ws.on('message', (message) => {
-        console.log("Message", message);
+        
         try {
             if (!client()) return;
             const response = JSON.parse(message);
-            
+            console.log("Message", response);
             switch (response.message_type) {
                 case "InitialJoinMessage":
-                    
+                    console.log("HELLLO");
                     client().unique_identity = response.unique_identity;
                     client().room_name = response.room_name;
                     client().username = response.username;
                     console.log("InitialJoinMessage", client())
+                    console.log(clients);
                     another_player = clients.find(clientFromList => clientFromList.room_name === response.room_name && clientFromList != ws);
-                    
+                    console.log(another_player && "found another player");
                     const randomNumber = Math.floor(Math.random() * 2) + 1;
                     const forAnotherPlayerMessage = {
                         message_type: "PlayerConnected",
