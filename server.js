@@ -32,8 +32,8 @@ server.on('connection', (ws) => {
                     client().unique_identity = response.unique_identity;
                     client().room_name = response.room_name;
                     client().username = response.username;
-                    console.log("InitialJoinMessage", client().username)
-                    another_player = clients.find(clientFromList => clientFromList.room_name === response.room_name);
+                    console.log("InitialJoinMessage", client())
+                    another_player = clients.find(clientFromList => clientFromList.room_name === response.room_name && clientFromList != ws);
                     
                     const randomNumber = Math.floor(Math.random() * 2) + 1;
                     const forAnotherPlayerMessage = {
