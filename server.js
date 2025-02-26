@@ -21,16 +21,18 @@ server.on('connection', (ws) => {
     let another_player = null;
     
     ws.on('message', (message) => {
+        console.log("Message", message);
         try {
             if (!client()) return;
             const response = JSON.parse(message);
             
             switch (response.message_type) {
                 case "InitialJoinMessage":
+                    
                     client().unique_identity = response.unique_identity;
                     client().room_name = response.room_name;
                     client().username = response.username;
-
+                    console.log("InitialJoinMessage", client().username)
                     another_player = clients.find(clientFromList => clientFromList.room_name === response.room_name);
                     
                     const randomNumber = Math.floor(Math.random() * 2) + 1;
@@ -53,6 +55,7 @@ server.on('connection', (ws) => {
                     client().unique_identity = response.unique_identity;
                     client().room_name = response.room_name;
                     client().username = response.username;
+                    console.log("InitialCreateMessage", client().username)
                     break;
 
                 case "PlayerMove":
@@ -87,4 +90,5 @@ server.on('connection', (ws) => {
     ws.on('error', (err) => {
         console.error('Ошибка WebSocket:', err);
     });
+    ws.send(JSON.stringify({message_type:"ConnectedToWebSocket"}));
 });
