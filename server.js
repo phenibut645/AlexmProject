@@ -4,9 +4,7 @@ const port = process.env.PORT || 3000;
 const server = new WebSocket.Server({ port });
 
 console.log(`WebSocket сервер запущен на порту ${port}`);
-server.once(()=>{
 
-});
 let clients = [];
 
 server.on('connection', (ws) => {
