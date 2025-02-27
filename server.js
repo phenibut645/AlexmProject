@@ -70,9 +70,12 @@ server.on('connection', (ws) => {
                     break;
                 }
                 case "PlayerMove":
+                    
                     if (another_player) {
                         const moveMessage = {
-                            message_type: "PlayerMoved"
+                            message_type: "PlayerMoved",
+                            x: response.x,
+                            y: response.y
                         };
                         another_player.client.send(JSON.stringify(moveMessage));
                     }
