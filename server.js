@@ -4,7 +4,9 @@ const port = process.env.PORT || 3000;
 const server = new WebSocket.Server({ port });
 
 console.log(`WebSocket сервер запущен на порту ${port}`);
+server.once(()=>{
 
+});
 let clients = [];
 
 server.on('connection', (ws) => {
@@ -95,7 +97,14 @@ server.on('connection', (ws) => {
                 case "Close":
                     console.log("Клиент запросил закрытие соединения");
                     break;
-
+                case "PlayerWon":
+                    const anotherPlayerWon = getAnotherPlayer(client.room_name);
+                    if(anotherPlayerWon){
+                        const wonMessage = {
+                            message_type:"PlayerWon"
+                        };
+                        anotherPlayerWon.client.send(JSON.stringify(wonMessage));
+                    }
                 default:
                     console.log("Неизвестный тип сообщения:", response.message_type);
                     break;
