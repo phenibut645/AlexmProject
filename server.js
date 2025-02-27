@@ -18,7 +18,7 @@ server.on('connection', (ws) => {
     });
     
     let client = () => clients.find(clientData => clientData.client === ws);
-    let another_player = null;
+    let another_player = () => clients.find(clientFromList => clientFromList.room_name === response.room_name && clientFromList != ws) || null;
     
     ws.on('message', (message) => {
         
@@ -34,8 +34,7 @@ server.on('connection', (ws) => {
                     client().username = response.username;
                     console.log("InitialJoinMessage", client())
                     console.log(clients);
-                    another_player = clients.find(clientFromList => clientFromList.room_name === response.room_name && clientFromList != ws);
-                    console.log(another_player && "found another player");
+                    console.log(another_player() && "found another player");
                     const randomNumber = Math.floor(Math.random() * 2) + 1;
                     const forAnotherPlayerMessage = {
                         message_type: "PlayerConnected",
@@ -46,8 +45,8 @@ server.on('connection', (ws) => {
                         message_type: "ConnectionCompleted",
                         turn: randomNumber === 2 ? true : false
                     };
-                    if (another_player) {
-                        another_player.client.send(JSON.stringify(forAnotherPlayerMessage));
+                    if (another_player()) {
+                        another_player().client.send(JSON.stringify(forAnotherPlayerMessage));
                     }
                     client().client.send(JSON.stringify(forCurrentClient));
                     break;
@@ -60,8 +59,8 @@ server.on('connection', (ws) => {
                     break;
                 case "ReconnectMessage":
                     console.log(client().username, "is reconnecting");
-                    if(another_player){
-                        another_player.send(JSON.stringify({
+                    if(another_player()){
+                        another_player().send(JSON.stringify({
                             message_type: "PlayerReconnected"
                         }))
                     }
@@ -70,14 +69,15 @@ server.on('connection', (ws) => {
                     break;
                 }
                 case "PlayerMove":
-                    
+
                     if (another_player) {
                         const moveMessage = {
                             message_type: "PlayerMoved",
                             x: response.x,
                             y: response.y
                         };
-                        another_player.client.send(JSON.stringify(moveMessage));
+                        console.log("about player move server sended to", another_player().username)
+                        another_player().client.send(JSON.stringify(moveMessage));
                     }
                     break;
                     
