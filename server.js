@@ -58,7 +58,17 @@ server.on('connection', (ws) => {
                     client().username = response.username;
                     console.log("InitialCreateMessage", client().username)
                     break;
-
+                case "ReconnectMessage":
+                    console.log(client().username, "is reconnecting");
+                    if(another_player){
+                        another_player.send(JSON.stringify({
+                            message_type: "PlayerReconnected"
+                        }))
+                    }
+                    break;
+                case "PlayerDisconnected":{
+                    break;
+                }
                 case "PlayerMove":
                     if (another_player) {
                         const moveMessage = {
