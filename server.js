@@ -105,6 +105,7 @@ server.on('connection', (ws) => {
                         };
                         anotherPlayerWon.client.send(JSON.stringify(wonMessage));
                     }
+                    break;
                 default:
                     console.log("Неизвестный тип сообщения:", response.message_type);
                     break;
