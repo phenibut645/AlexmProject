@@ -72,11 +72,12 @@ namespace alexm_app.Services
         {
             if(EnemyPlayer != null && EnemyPlayer.Side != null && CurrentPlayer != null && CurrentPlayer.Side != null)
             {
-                CellButton cell = CurrentGamePage.GetCellButton(message.X, message.Y);
-                cell.Closed = true;
+                
                 CurrentSideMove = (Sides)CurrentPlayer.Side;
                 MainThread.InvokeOnMainThreadAsync(() =>
                 {
+                    CellButton cell = CurrentGamePage.GetCellButton(message.X, message.Y);
+                    cell.Closed = true;
                     CurrentGamePage.ColourCell((Sides)EnemyPlayer.Side, true, cell);
                 });
             }
