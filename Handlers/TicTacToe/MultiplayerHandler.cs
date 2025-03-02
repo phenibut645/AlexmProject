@@ -46,7 +46,9 @@ namespace alexm_app.Services
         {
             if(EnemyPlayer != null && CurrentPlayer != null)
             {
+                Debug.WriteLine("LOX JA EBANNIJ");
                 CurrentGamePage.ServerState.Text = $"Connection completed! Your enemy is: {EnemyPlayer.Username}";
+                Debug.WriteLine("LOX JA NE EBANNIJ");
                 CurrentPlayer.Side = GetSide(message.Turn);
                 EnemyPlayer.Side = GetSide(!message.Turn);
 
@@ -79,13 +81,17 @@ namespace alexm_app.Services
         {
             if(CurrentPlayer != null)
             {
+                Debug.WriteLine("LOX JA EBANNIJ");
                 EnemyPlayer = new Player(message.PlayerUsername);
-
+                Debug.WriteLine("LOX JA 1 EBANNIJ");
                 CurrentPlayer.Side = GetSide(message.Turn);
+                Debug.WriteLine("LOX JA 2 EBANNIJ");
                 EnemyPlayer.Side = GetSide(!message.Turn);
+                Debug.WriteLine("LOX JA 2 EBANNIJ");
                 CurrentGamePage.ServerState.Text = $"{EnemyPlayer.Username} connected";
-
+                Debug.WriteLine("LOX JA NE EBANNIJ");
                 UpdateSideText();
+                Debug.WriteLine("LOX JA 3 EBANNIJ");
             }
         }
 
