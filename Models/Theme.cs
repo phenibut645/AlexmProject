@@ -13,6 +13,9 @@ namespace alexm_app.Models
 
         private Color _backgroundColor = Color.FromRgba("#2b2c36");
         public event OptionChanged onBackgroundColorChange;
+
+        public Color EnemyCell { get; set; } = Color.FromRgba("#ff5447");
+        public Color PlayerCell { get; set; } = Color.FromRgba("#91ff87");
         public Color BackgroundColor
         {
             get { return _backgroundColor; }

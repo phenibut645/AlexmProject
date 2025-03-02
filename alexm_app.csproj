@@ -98,4 +98,9 @@
 	  </MauiXaml>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Models\TicTacToe\ClientMessages\Database\" />
+	  <Folder Include="Utils\TicTacToe\" />
+	</ItemGroup>
+
 </Project>

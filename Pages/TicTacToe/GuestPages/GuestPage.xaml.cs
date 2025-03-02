@@ -1,5 +1,6 @@
 ﻿using alexm_app.Models;
-using alexm_app.Utils.TicTacToe;
+using alexm_app.Services;
+
 namespace alexm_app;
 
 public partial class GuestPage : ContentPage
@@ -39,7 +40,7 @@ public partial class GuestPage : ContentPage
 		InitRejoinButton();
 
 		
-		Button button = GameHandler.GetReportButton(this);
+		Button button = MultiplayerHandler.GetReportButton(this);
 		MainContainer.Children.Add(button);
 
     }
@@ -50,7 +51,7 @@ public partial class GuestPage : ContentPage
 			MainContainer.Children.Add(ReconnectButton);
 			ReconnectButton.Clicked += async (object? sender, EventArgs args) =>
 			{
-				GameHandler.Reconnect();
+				MultiplayerHandler.Reconnect();
 			};
 
         }

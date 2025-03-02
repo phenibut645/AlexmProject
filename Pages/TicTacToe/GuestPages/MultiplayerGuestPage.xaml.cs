@@ -1,4 +1,5 @@
 using alexm_app.Models.TicTacToe.ServerMessages;
+using alexm_app.Services;
 using alexm_app.Utils.TicTacToe;
 using System.Diagnostics;
 
@@ -43,32 +44,20 @@ public partial class MultiplayerGuestPage : ContentPage
 		RefreshPicker.Clicked += RefreshPicker_Clicked;
         JoinRoomButton.Clicked += async (object? sender, EventArgs e) =>
 		{
-			if(RoomPicker.SelectedIndex == -1 || UsernameEntry.Text == "")
-			{
-				await DisplayAlert("Alert", "Some entries is empty!", "OK");
-			}
-			else if(Games == null)
-			{
-				await DisplayAlert("Alert", "There's no available room", "OK");
-			}
-			else
-			{
-				await GameHandler.JoinPlayer(UsernameEntry.Text, Games[RoomPicker.SelectedIndex]);
-			}
+			if(RoomPicker.SelectedIndex == -1 || UsernameEntry.Text == "") await DisplayAlert("Alert", "Some entries is empty!", "OK");
+			else if(Games == null) await DisplayAlert("Alert", "There's no available room", "OK");
+			else await MultiplayerHandler.JoinPlayer(UsernameEntry.Text, Games[RoomPicker.SelectedIndex]);
 		};
 		CreateRoomButton.Clicked += async (object? sender, EventArgs e) =>
 		{
-			if(UsernameEntry.Text == "")
-			{
-				await DisplayAlert("Alert", "Some entries is empty!", "OK");
-			}
+			if(UsernameEntry.Text == "") await DisplayAlert("Alert", "Some entries is empty!", "OK");
 			else
 			{
 				string response = await Application.Current.MainPage.DisplayPromptAsync("Create a room", "Room name", "OK", "Cancel", "", 100, keyboard: Keyboard.Default);
 				if(response != null && response != "")
 				{
 					Debug.WriteLine("Creating game...");
-					GameHandler.CreateGame(response, UsernameEntry.Text);
+					await MultiplayerHandler.CreateRoom(response, UsernameEntry.Text);
 				}
 			}
 		};

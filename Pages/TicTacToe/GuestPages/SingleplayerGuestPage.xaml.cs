@@ -1,5 +1,5 @@
 using alexm_app.Enums.TicTacToe;
-using static alexm_app.TicTacToe;
+using static alexm_app.TicTacToePage;
 
 namespace alexm_app;
 

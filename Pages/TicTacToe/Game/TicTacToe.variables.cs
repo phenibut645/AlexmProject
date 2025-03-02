@@ -10,7 +10,7 @@ using Game = alexm_app.Models.TicTacToe.Game;
 
 namespace alexm_app
 {
-    public partial class TicTacToe
+    public partial class TicTacToePage
     {
         public Grid GameArea { get; set; } = new Grid()
         {
@@ -20,8 +20,8 @@ namespace alexm_app
         public VerticalStackLayout MainContainer { get; set; } = new VerticalStackLayout();
         public List<List<CellButton>> CellList { get; set; } = new List<List<CellButton>>();
         public Button CancelGameButton { get; set; } = new Button() { Text = "Cancel" } ;
-        public Label ServerState { get; set; } = new Label() { Text = "Waiting for player", TextColor = Color.FromArgb("#ffffff")};
-        public Label CurrentSide { get; set; } = new Label() { Text = $"Current side: {AppContext.Side}", TextColor = Color.FromArgb("#ffffff")};
-        public Label PlayerSide { get; set; } =  new Label() { Text = $"Your side: {AppContext.Player.Side.ToString()}", TextColor = Color.FromArgb("#ffffff")};
+        public Label ServerState { get; set; } = new Label();
+        public Label CurrentSide { get; set; } = new Label();
+        public Label PlayerSide { get; set; } =  new Label();
     }
 }

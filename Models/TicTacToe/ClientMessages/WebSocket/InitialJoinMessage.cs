@@ -11,8 +11,6 @@ namespace alexm_app.Models.TicTacToe.ClientMessages.WebSocket
     {
         [JsonProperty("message_type")]
         public string MessageType { get; set; } = "InitialJoinMessage";
-        [JsonProperty("unique_identity")]
-        public string UniqueIdentity { get; set; }
         [JsonProperty("room_name")]
         public string RoomName { get; set; }
         [JsonProperty("username")]

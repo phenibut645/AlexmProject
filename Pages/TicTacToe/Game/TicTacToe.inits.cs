@@ -1,5 +1,6 @@
 ﻿using alexm_app.Controls;
 using alexm_app.Models.TicTacToe;
+using alexm_app.Utils.TicTacToe;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,14 +11,14 @@ using Cell = alexm_app.Models.TicTacToe.Cell;
 
 namespace alexm_app
 {
-    public partial class TicTacToe
+    public partial class TicTacToePage
     {
         private void InitGameArea()
         {
             for(int i = 0; i < 3; i++)
             {
-                GameArea.RowDefinitions.Add(new RowDefinition() { Height = (int)Math.Round(50 * AppContext.TicTacToeSizeOfMapMultiply) });
-                GameArea.ColumnDefinitions.Add(new ColumnDefinition() {Width = (int)Math.Round(50 * AppContext.TicTacToeSizeOfMapMultiply) } );
+                GameArea.RowDefinitions.Add(new RowDefinition() { Height = (int)Math.Round(50 * GameStateService.TicTacToeSizeOfMapMultiply) });
+                GameArea.ColumnDefinitions.Add(new ColumnDefinition() {Width = (int)Math.Round(50 * GameStateService.TicTacToeSizeOfMapMultiply) } );
             }
             for(int row = 0; row < 3; row++)
             {
@@ -33,8 +34,7 @@ namespace alexm_app
                     CellList[row].Add(button);
                 }
             }
+            OnGameAreaCreate?.Invoke();
         }
-
-
     }
 }

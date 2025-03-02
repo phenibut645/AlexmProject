@@ -1,32 +1,29 @@
 using alexm_app.Enums.TicTacToe;
+using alexm_app.Handlers.TicTacToe;
 using alexm_app.Models;
+using alexm_app.Services;
 using alexm_app.Utils.TicTacToe;
 using System.Diagnostics;
 
 namespace alexm_app;
 
-public partial class TicTacToe : ContentPage
+public partial class TicTacToePage : ContentPage
 {
-
-	public TicTacToe()
+	public delegate Task AsyncPageCreate();
+	public TicTacToePage(AsyncPageCreate onPageCreated)
 	{
 		Content = MainContainer;
 		MainContainer.Children.Add(ServerState);
 		MainContainer.Children.Add(GameArea);
 		MainContainer.Children.Add(CurrentSide);
 		MainContainer.Children.Add(PlayerSide);
-        AppContext.OnSideChange += AppContext_OnSideChange;
+        
 		InitGameArea();
 		AddEventListeners();
-		AppContext.TicTacToeTheme.CallEveryEvent();
-		// Task.Run(async() => await ReportSender.SendMessage("Tic-Tac-Toe game started"));
-		
-		AppContext.CurrentGame = this;
-		GameHandler.GamePageCreated();
-		
-		Debug.WriteLine("Connecting to web socket...");
-		_ = SServerHandler.Connect();
+		GameStateService.TicTacToeTheme.CallEveryEvent();
+
+		Task.Run(async () => {
+			await onPageCreated();
+		});
 	}
-
-
 }

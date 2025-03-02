@@ -20,7 +20,7 @@ namespace alexm_app.Utils.TicTacToe
     public delegate void PlayerMovedDelegate(PlayerMoved message);
     public delegate void PlayerReconnectedDelegate();
     public delegate void WebSocketCloseDelegate();
-    public static class SServerHandler
+    public static class WebSocketHandler
     {
         public static event PlayerConnectedDelegate OnPlayerConnect;
         public static event MessageFailedDelegate OnMessageFail;
@@ -31,7 +31,7 @@ namespace alexm_app.Utils.TicTacToe
         public static event Action OnPlayerWin;
         
         public static List<ClientMessage> OnReadyMessages { get; private set; } = new List<ClientMessage>();
-        private static readonly Uri ServerUri  = new Uri(@"wss://tic-tac-toe-server-4jnk.onrender.com");
+        private static readonly Uri ServerUri  = new Uri(@"ws://api.aleksandermilisenko23.thkit.ee");
         private static ClientWebSocket _webSocket = new ClientWebSocket();
         private static bool Connected = false;
 
@@ -185,27 +185,3 @@ namespace alexm_app.Utils.TicTacToe
         }
     }
 }
-
-
-        //public static async Task Connecttt()
-        //{
-        //    try { 
-        //        await _webSocket.ConnectAsync(ServerUri, CancellationToken.None);
-        //        Debug.WriteLine("connection has created");
-        //        string message = "test , LIDA THE BEST";
-        //        ArraySegment<byte> bytesToSend = new ArraySegment<byte>(Encoding.UTF8.GetBytes(message));
-        //        await _webSocket.SendAsync(bytesToSend, WebSocketMessageType.Text, true, CancellationToken.None);
-        //        Debug.WriteLine("message has sended: " + message);
-        //        var buffer = new byte[1024];
-
-        //        WebSocketReceiveResult result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-        //        string receivedMessage = Encoding.UTF8.GetString(buffer, 0 , result.Count);
-        //        Debug.WriteLine("Message has received: " + receivedMessage);
-        //        await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Close", CancellationToken.None);
-        //        Debug.WriteLine("Connection has closed");
-        //    }
-        //    catch (WebSocketException ex)
-        //    {
-        //        Debug.WriteLine("WebSocket error: " + ex.Message);
-        //    }
-        //}
