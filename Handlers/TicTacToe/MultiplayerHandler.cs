@@ -100,10 +100,6 @@ namespace alexm_app.Services
                     UpdateSideText();
                     Debug.WriteLine("LOX JA 3 EBANNIJ");
                 });
-                
-                
-                
-                
             }
         }
 
@@ -170,7 +166,10 @@ namespace alexm_app.Services
             {
                 if(CurrentPlayer != null && CurrentSideMove == CurrentPlayer.Side && !cell.Closed && cell.CellInGameArea != null && CurrentPlayer.Side != null)
                 {
-                    CurrentGamePage.ColourCell((Sides)CurrentPlayer.Side, false, cell);
+                    _ = MainThread.InvokeOnMainThreadAsync(() =>
+                    {
+                        CurrentGamePage.ColourCell((Sides)CurrentPlayer.Side, false, cell);
+                    });
                     cell.Closed = true;
                     CurrentSideMove = (Sides)EnemyPlayer.Side;
                     await WebSocketHandler.SendMessage(new PlayerMove() { X = cell.CellInGameArea.X , Y = cell.CellInGameArea.Y });
