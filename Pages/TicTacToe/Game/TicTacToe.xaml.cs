@@ -17,6 +17,7 @@ public partial class TicTacToePage : ContentPage
 		MainContainer.Children.Add(GameArea);
 		MainContainer.Children.Add(CurrentSide);
 		MainContainer.Children.Add(PlayerSide);
+		MainContainer.Children.Add(CancelGameButton);
         
 		InitGameArea();
 		AddEventListeners();

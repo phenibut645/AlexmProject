@@ -54,5 +54,18 @@ namespace alexm_app.Utils.TicTacToe
         public static INavigation Navigation { get; set; }
         public static Player? EnemyPlayer { get; set; } = null;
         public static GameConnection? GameConnection { get; set; } = null;
+        public static Player? SavedPlayerInfo { get; set; } = null;
+
+        public static void Reset()
+        {
+            GameMode = null;
+            UniqueIdentity = null;
+            Game = null;
+            Player = null;
+            IsGameRunning = null;
+            EnemyPlayer = null;
+            GameConnection = null;
+            _side = Sides.Cross;
+        }
     }
 }

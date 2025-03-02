@@ -14,9 +14,10 @@ namespace alexm_app.Services
 {
     public static class MultiplayerHandler
     {
-        public static GameConnection Connection;
-        public static bool IsGameRunning;
-        public static TicTacToePage CurrentGamePage;
+        public static event Action OnRunningGameClose;
+        public static GameConnection? Connection = null;
+        public static bool? IsGameRunning = null;
+        public static TicTacToePage? CurrentGamePage = null;
         public static Player? EnemyPlayer = null;
         public static Player? CurrentPlayer = null;
 
@@ -44,13 +45,21 @@ namespace alexm_app.Services
             WebSocketHandler.OnPlayerReconnect += WebSocketHandler_OnPlayerReconnect;
             WebSocketHandler.OnWebSocketClose += WebSocketHandler_OnWebSocketClose;
             WebSocketHandler.OnConnectionComplete += WebSocketHandler_OnConnectionComplete;
+            WebSocketHandler.OnPlayerDisconnect += WebSocketHandler_OnPlayerDisconnect;
+        }
+
+        private static void WebSocketHandler_OnPlayerDisconnect()
+        {
+            MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                CurrentGamePage.ServerState.Text = $"Player has disconnected!";
+            });
         }
 
         private static void WebSocketHandler_OnConnectionComplete(Models.TicTacToe.ServerMessages.WebSocket.ConnectionCompleted message)
         {
             if(EnemyPlayer != null && CurrentPlayer != null)
             {
-                Debug.WriteLine("LOX JA EBANNIJ");
                 CurrentPlayer.Side = GetSide(message.Turn);
                 EnemyPlayer.Side = GetSide(!message.Turn);
                 MainThread.InvokeOnMainThreadAsync(() =>
@@ -58,7 +67,6 @@ namespace alexm_app.Services
                     CurrentGamePage.ServerState.Text = $"Connection completed! Your enemy is: {EnemyPlayer.Username}";
                     UpdateSideText();
                 });
-                Debug.WriteLine("LOX JA NE EBANNIJ");
             }
         }
 
@@ -69,7 +77,11 @@ namespace alexm_app.Services
 
         private static void WebSocketHandler_OnPlayerReconnect()
         {
-            
+            MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    CurrentGamePage.ServerState.Text = $"Connection completed! Your enemy is: {EnemyPlayer.Username}";
+                    UpdateSideText();
+            });
         }
 
         private static void WebSocketHandler_OnPlayerMove(Models.TicTacToe.ServerMessages.WebSocket.PlayerMoved message)
@@ -91,19 +103,13 @@ namespace alexm_app.Services
         {
             if(CurrentPlayer != null)
             {
-                Debug.WriteLine("LOX JA EBANNIJ");
                 EnemyPlayer = new Player(message.PlayerUsername);
-                Debug.WriteLine("LOX JA 1 EBANNIJ");
                 CurrentPlayer.Side = GetSide(message.Turn);
-                Debug.WriteLine("LOX JA 2 EBANNIJ");
                 EnemyPlayer.Side = GetSide(!message.Turn);
-                Debug.WriteLine("LOX JA 2 EBANNIJ");
                 MainThread.InvokeOnMainThreadAsync(() =>
                 {
                     CurrentGamePage.ServerState.Text = $"{EnemyPlayer.Username} connected";
-                    Debug.WriteLine("LOX JA NE EBANNIJ");
                     UpdateSideText();
-                    Debug.WriteLine("LOX JA 3 EBANNIJ");
                 });
             }
         }
@@ -121,7 +127,14 @@ namespace alexm_app.Services
         {
             
         }
+        public static void Rejoin()
+        {
+            Connection = GameConnection.Connect;
+            if(GameStateService.SavedPlayerInfo == null) return;
+            CurrentPlayer = new Player(GameStateService.SavedPlayerInfo.Username);
 
+            WebSocketHandler.OnReadyMessages.Add(new ReconnectMessage() { Username = GameStateService.SavedPlayerInfo.Username});
+        }
         public static Sides GetSide(bool value)
         {
             return value ? Sides.Cross : Sides.Nought;
@@ -132,10 +145,12 @@ namespace alexm_app.Services
             Connection = GameConnection.Connect;
 
             EnemyPlayer = new Player(game.Username) { Id = game.PlayerId };
-            CurrentPlayer = new Player("username");
+            CurrentPlayer = new Player(username);
             WebSocketHandler.OnReadyMessages.Add(new InitialJoinMessage() { RoomName = game.RoomName, Username = username });
             CurrentGamePage = new TicTacToePage(PageCreated);
-            CurrentGamePage.ServerState.Text = $"Connection to {EnemyPlayer.Username}...";
+            _ = MainThread.InvokeOnMainThreadAsync(()=>{
+                CurrentGamePage.ServerState.Text = $"Connection to {EnemyPlayer.Username}...";
+                });
             await GameStateService.Navigation.PushAsync(CurrentGamePage);
         }
         public static async Task CreateRoom(string username, string room)
@@ -157,7 +172,22 @@ namespace alexm_app.Services
             {
                 CurrentGamePage.OnCellClick += CurrentGamePage_OnCellClick;
                 CurrentGamePage.OnGameAreaCreate += CurrentGamePage_OnGameAreaCreate;
+                CurrentGamePage.OnGameCancel += CurrentGamePage_OnGameCancel;
             }
+        }
+
+        private static async void CurrentGamePage_OnGameCancel()
+        {
+            await WebSocketHandler.Close();
+            await GameStateService.Navigation.PopAsync();
+            GameStateService.SavedPlayerInfo = CurrentPlayer;
+            GameStateService.Reset();
+            Connection = null;
+            IsGameRunning = null;
+            CurrentGamePage = null;
+            EnemyPlayer = null;
+            CurrentPlayer = null;
+            _currentSideMove = FirstSideMove;
         }
 
         private static void CurrentGamePage_OnGameAreaCreate()

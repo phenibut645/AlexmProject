@@ -19,6 +19,7 @@ public partial class MultiplayerGuestPage : ContentPage
 	public Entry UsernameEntry { get; set; } = new Entry();
 	public Button JoinRoomButton { get; set; } = new Button() { Text = "Join room" };
 	public Button RefreshPicker { get; set; } = new Button() { Text="Refresh"};
+	public Button RejoinButton { get; set; } = new Button() { IsVisible = false, Text = "Rejoin"};
 	public List<AvailableGame>? Games { get; set; }
 	public MultiplayerGuestPage()
 	{
@@ -36,10 +37,19 @@ public partial class MultiplayerGuestPage : ContentPage
 		ButtonsContainer.Children.Add(JoinRoomButton);
 		ButtonsContainer.Children.Add(CreateRoomButton);
 		MainContainer.Children.Add(ButtonsContainer);
+		MainContainer.Children.Add(RejoinButton);
         _ = InitPickerItems();
         InitEventListeners();
+        MultiplayerHandler.OnRunningGameClose += MultiplayerHandler_OnRunningGameClose;
 	}
-	private void InitEventListeners()
+
+    private void MultiplayerHandler_OnRunningGameClose()
+    {
+        RejoinButton.IsVisible = true;
+		MultiplayerHandler.Rejoin();
+    }
+
+    private void InitEventListeners()
 	{
 		RefreshPicker.Clicked += RefreshPicker_Clicked;
         JoinRoomButton.Clicked += async (object? sender, EventArgs e) =>

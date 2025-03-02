@@ -11,5 +11,7 @@ namespace alexm_app.Models.TicTacToe.ClientMessages.WebSocket
     {
         [JsonProperty("message_type")]
         public string MessageType { get; set; } = "ReconnectMessage";
+        [JsonProperty("username")]
+        public string Username { get; set; }
     }
 }

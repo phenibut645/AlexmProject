@@ -20,6 +20,7 @@ namespace alexm_app.Utils.TicTacToe
     public delegate void PlayerMovedDelegate(PlayerMoved message);
     public delegate void PlayerReconnectedDelegate();
     public delegate void WebSocketCloseDelegate();
+    public delegate void PlayerDisconnectedDelegate();
     public static class WebSocketHandler
     {
         public static event PlayerConnectedDelegate OnPlayerConnect;
@@ -29,6 +30,7 @@ namespace alexm_app.Utils.TicTacToe
         public static event PlayerReconnectedDelegate OnPlayerReconnect;
         public static event WebSocketCloseDelegate OnWebSocketClose;
         public static event Action OnPlayerWin;
+        public static event Action OnPlayerDisconnect;
         
         public static List<ClientMessage> OnReadyMessages { get; private set; } = new List<ClientMessage>();
         private static readonly Uri ServerUri  = new Uri(@"ws://api.aleksandermilisenko23.thkit.ee");
@@ -156,7 +158,7 @@ namespace alexm_app.Utils.TicTacToe
                             OnPlayerWin?.Invoke();
                             break;
                         case "PlayerDisconnected":
-                            
+                            OnPlayerDisconnect?.Invoke();
                             break;
                         default:
                             break;
