@@ -47,12 +47,14 @@ namespace alexm_app.Services
             if(EnemyPlayer != null && CurrentPlayer != null)
             {
                 Debug.WriteLine("LOX JA EBANNIJ");
-                CurrentGamePage.ServerState.Text = $"Connection completed! Your enemy is: {EnemyPlayer.Username}";
-                Debug.WriteLine("LOX JA NE EBANNIJ");
                 CurrentPlayer.Side = GetSide(message.Turn);
                 EnemyPlayer.Side = GetSide(!message.Turn);
-
-                UpdateSideText();
+                MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    CurrentGamePage.ServerState.Text = $"Connection completed! Your enemy is: {EnemyPlayer.Username}";
+                    UpdateSideText();
+                });
+                Debug.WriteLine("LOX JA NE EBANNIJ");
             }
         }
 
@@ -72,8 +74,11 @@ namespace alexm_app.Services
             {
                 CellButton cell = CurrentGamePage.GetCellButton(message.X, message.Y);
                 cell.Closed = true;
-                CurrentGamePage.ColourCell((Sides)EnemyPlayer.Side, true, cell);
                 CurrentSideMove = (Sides)CurrentPlayer.Side;
+                MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    CurrentGamePage.ColourCell((Sides)EnemyPlayer.Side, true, cell);
+                });
             }
         }
 
@@ -88,10 +93,17 @@ namespace alexm_app.Services
                 Debug.WriteLine("LOX JA 2 EBANNIJ");
                 EnemyPlayer.Side = GetSide(!message.Turn);
                 Debug.WriteLine("LOX JA 2 EBANNIJ");
-                CurrentGamePage.ServerState.Text = $"{EnemyPlayer.Username} connected";
-                Debug.WriteLine("LOX JA NE EBANNIJ");
-                UpdateSideText();
-                Debug.WriteLine("LOX JA 3 EBANNIJ");
+                MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    CurrentGamePage.ServerState.Text = $"{EnemyPlayer.Username} connected";
+                    Debug.WriteLine("LOX JA NE EBANNIJ");
+                    UpdateSideText();
+                    Debug.WriteLine("LOX JA 3 EBANNIJ");
+                });
+                
+                
+                
+                
             }
         }
 
