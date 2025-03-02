@@ -1,5 +1,6 @@
 ﻿using alexm_app.Models;
 using alexm_app.Services;
+using alexm_app.Utils.TicTacToe;
 
 namespace alexm_app;
 
@@ -40,21 +41,13 @@ public partial class GuestPage : ContentPage
 		InitRejoinButton();
 
 		
-		Button button = MultiplayerHandler.GetReportButton(this);
-		MainContainer.Children.Add(button);
+		//Button button = MultiplayerHandler.GetReportButton(this);
+		//MainContainer.Children.Add(button);
 
     }
 	private void InitRejoinButton()
 	{
-		if(AppContext.CurrentGame != null)
-		{
-			MainContainer.Children.Add(ReconnectButton);
-			ReconnectButton.Clicked += async (object? sender, EventArgs args) =>
-			{
-				MultiplayerHandler.Reconnect();
-			};
 
-        }
 	}
 	private void InitEventListeners()
 	{
@@ -87,7 +80,7 @@ public partial class GuestPage : ContentPage
 
 	private void onPageLeave()
 	{
-		AppContext.TicTacToeTheme = Themes[ThemePicker.SelectedIndex];
-		AppContext.TicTacToeSizeOfMapMultiply = SizeOfGameAreaSlider.Value;
+		GameStateService.TicTacToeTheme = Themes[ThemePicker.SelectedIndex];
+		GameStateService.TicTacToeSizeOfMapMultiply = SizeOfGameAreaSlider.Value;
 	}
 }

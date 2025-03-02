@@ -1,4 +1,6 @@
-﻿namespace alexm_app;
+﻿using alexm_app.Utils.TicTacToe;
+
+namespace alexm_app;
 
 public partial class MainPage : ContentPage
 {
@@ -7,7 +9,7 @@ public partial class MainPage : ContentPage
     VerticalStackLayout MainContainer { get; set; }
     public MainPage()
     {
-        AppContext.Navigation = Navigation;
+        GameStateService.Navigation = Navigation;
         Title = "Avaleht";
         MainContainer = new VerticalStackLayout { BackgroundColor = Color.FromArgb("#161824") };
         int index = -1;

@@ -26,7 +26,7 @@ public partial class SingleplayerGuestPage : ContentPage
 	} 
 	private void InitEventListeners()
 	{
-		BotGame.Clicked += async (object? sender, EventArgs args) => await Navigation.PushAsync(new TicTacToe());
-		Singleplayer.Clicked += async (object? sender, EventArgs args) => await Navigation.PushAsync(new TicTacToe());
+		BotGame.Clicked += async (object? sender, EventArgs args) => await Navigation.PushAsync(new TicTacToePage(async () => { }));
+		Singleplayer.Clicked += async (object? sender, EventArgs args) => await Navigation.PushAsync(new TicTacToePage(async () => { }));
 	}
 }
