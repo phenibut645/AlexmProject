@@ -28,7 +28,11 @@ namespace alexm_app.Services
             set
             {
                 _currentSideMove = value;
-                UpdateSideText();
+                MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    UpdateSideText();
+                });
+                
             }
         }
 
