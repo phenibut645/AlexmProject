@@ -113,7 +113,7 @@ namespace alexm_app.Services
             Connection = GameConnection.Connect;
 
             EnemyPlayer = new Player(game.Username) { Id = game.PlayerId };
-
+            CurrentPlayer = new Player("username");
             WebSocketHandler.OnReadyMessages.Add(new InitialJoinMessage() { RoomName = game.RoomName, Username = username });
             CurrentGamePage = new TicTacToePage(PageCreated);
             CurrentGamePage.ServerState.Text = $"Connection to {EnemyPlayer.Username}...";
@@ -122,6 +122,7 @@ namespace alexm_app.Services
         public static async Task CreateRoom(string username, string room)
         {
             Connection = GameConnection.Create;
+            CurrentPlayer = new Player("username");
             WebSocketHandler.OnReadyMessages.Add(new InitialCreateMessage() { RoomName = room, Username = username });
             CurrentGamePage = new TicTacToePage(PageCreated);
             await GameStateService.Navigation.PushAsync(CurrentGamePage);
