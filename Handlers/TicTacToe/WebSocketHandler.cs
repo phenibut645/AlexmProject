@@ -36,7 +36,8 @@ namespace alexm_app.Utils.TicTacToe
         public static List<ClientMessage> OnReadyMessages { get; private set; } = new List<ClientMessage>();
         private static readonly Uri ServerUri  = new Uri(@"ws://api.aleksandermilisenko23.thkit.ee");
         private static ClientWebSocket _webSocket = new ClientWebSocket();
-        private static bool Connected = false;
+        private static CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
+        private static CancellationToken Token = CancellationTokenSource.Token;
 
         public static WebSocketState GetWebSocketState()
         {
@@ -46,7 +47,10 @@ namespace alexm_app.Utils.TicTacToe
         {
             try
             {
-                await _webSocket.ConnectAsync(ServerUri, CancellationToken.None);
+                CancellationTokenSource = new CancellationTokenSource();
+                Token = CancellationTokenSource.Token;
+
+                await _webSocket.ConnectAsync(ServerUri, Token);
                 
                 var buffer = new byte[1024];
 
@@ -68,7 +72,7 @@ namespace alexm_app.Utils.TicTacToe
                             
 
                         Debug.WriteLine($"Adding listener for messages... {_webSocket.State}");
-                        await ListenForMessagesAsync();
+                        Task task = Task.Run(() => ListenForMessagesAsync(), Token);
                         Debug.WriteLine("Listener has been added for messages.");
                     }
                 }
@@ -88,7 +92,7 @@ namespace alexm_app.Utils.TicTacToe
         {
             try
             {
-                await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Close", CancellationToken.None);
+                await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Close", Token);
                 _webSocket = new ClientWebSocket();
             }
             catch (WebSocketException ex)
@@ -99,7 +103,7 @@ namespace alexm_app.Utils.TicTacToe
         private static async Task ListenForMessagesAsync()
         {
             var buffer = new byte[1024];
-            while (_webSocket.State == WebSocketState.Open)
+            while (!Token.IsCancellationRequested)
             {
                 Debug.WriteLine("hoow");
                 try

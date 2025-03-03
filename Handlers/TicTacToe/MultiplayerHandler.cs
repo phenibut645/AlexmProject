@@ -245,26 +245,17 @@ namespace alexm_app.Services
         }
         private static bool IsItWinMove(CellButton cell)
         {
+            int winableCount = CurrentGamePage.DefaultCellsInColumn > 4 ? CurrentGamePage.DefaultCellsToWin - 1 : CurrentGamePage.DefaultCellsToWin;
             int count = 0;
             int count2 = 0;
             for(int row = 0; row < CurrentGamePage.DefaultCellsInRow; row++)
             {
                 for(int col = 0; col < CurrentGamePage.DefaultCellsInColumn; col++)
                 {
-                    if (CurrentGamePage.CellList[row][col].Side == CurrentPlayer.Side)
-                    {
-                        count++;
-                    }
-                    if (CurrentGamePage.CellList[col][row].Side == CurrentPlayer.Side)
-                    {
-                        count2++;
-                    }
+                    if (CurrentGamePage.CellList[row][col].Side == CurrentPlayer.Side) count++;
+                    if (CurrentGamePage.CellList[col][row].Side == CurrentPlayer.Side) count2++;
                 }
-                if(count == CurrentGamePage.DefaultCellsToWin || count2 == CurrentGamePage.DefaultCellsToWin)
-                {
-
-                    return true;
-                }
+                if(count == winableCount || count2 == winableCount) return true;
                 else 
                 {
                     count = 0;
@@ -277,20 +268,11 @@ namespace alexm_app.Services
             int column = 0;
             for(int row = 0; row < CurrentGamePage.DefaultCellsInRow; row++)
             {
-                if (CurrentGamePage.CellList[row][column].Side == CurrentPlayer.Side)
-                {
-                    count++;
-                }
-                if (CurrentGamePage.CellList[row][CurrentGamePage.DefaultCellsInColumn - 1 - column].Side == CurrentPlayer.Side)
-                {
-                    count2++;
-                }
+                if (CurrentGamePage.CellList[row][column].Side == CurrentPlayer.Side) count++;
+                if (CurrentGamePage.CellList[row][CurrentGamePage.DefaultCellsInColumn - 1 - column].Side == CurrentPlayer.Side) count2++;
                 column++;
             }
-            if(count == CurrentGamePage.DefaultCellsToWin || count2 == CurrentGamePage.DefaultCellsToWin)
-            {
-                return true;
-            }
+            if(count == winableCount || count2 == winableCount) return true;
             return false;
         }
 
@@ -301,7 +283,6 @@ namespace alexm_app.Services
             {
                 if(CurrentPlayer != null && CurrentSideMove == CurrentPlayer.Side && !cell.Closed && cell.CellInGameArea != null && CurrentPlayer.Side != null)
                 {
-                    
                     await MainThread.InvokeOnMainThreadAsync(() =>
                     {
                         CurrentGamePage.ColourCell((Sides)CurrentPlayer.Side, false, cell);
