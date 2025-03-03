@@ -108,7 +108,7 @@ namespace alexm_app.Utils.TicTacToe
                 Debug.WriteLine("hoow");
                 try
                 {
-                    var result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    var result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), Token);
                     Debug.WriteLine("yessir");
                     if (result.MessageType == WebSocketMessageType.Text)
                     {
