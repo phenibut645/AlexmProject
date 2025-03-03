@@ -103,7 +103,7 @@ namespace alexm_app.Utils.TicTacToe
         private static async Task ListenForMessagesAsync()
         {
             var buffer = new byte[1024];
-            while (!Token.IsCancellationRequested)
+            while (!Token.IsCancellationRequested || _webSocket.State == WebSocketState.Open)
             {
                 Debug.WriteLine("hoow");
                 try
