@@ -56,7 +56,6 @@ public partial class CreateRoom : ContentPage
 			int value = (int)Math.Round(slider.Value);
 			Value = value;
 			AreaSizeMultiplyLabel.Text = $"How many cells in rows and columns: {Value}";
-			Debug.WriteLine(Value);
 		}
     }
 }

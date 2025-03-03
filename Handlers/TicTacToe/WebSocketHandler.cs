@@ -93,6 +93,7 @@ namespace alexm_app.Utils.TicTacToe
             try
             {
                 await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Close", Token);
+                CancellationTokenSource.Cancel();
                 _webSocket = new ClientWebSocket();
             }
             catch (WebSocketException ex)
