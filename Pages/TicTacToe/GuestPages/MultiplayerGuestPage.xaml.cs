@@ -63,6 +63,10 @@ public partial class MultiplayerGuestPage : ContentPage
 		CreateRoomButton.Clicked += async (object? sender, EventArgs e) =>
 		{
 			if(UsernameEntry.Text == "") await DisplayAlert("Alert", "Some entries is empty!", "OK");
+			else if(await DatabaseHandler.IsUsernameAvailable(UsernameEntry.Text))
+			{
+				await DisplayAlert("Alert", "This username isn't available!", "OK");
+			}
 			else
 			{
 				GameStateService.Username = UsernameEntry.Text;

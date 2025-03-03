@@ -3,10 +3,12 @@ using alexm_app.Models.TicTacToe.ServerMessages;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace alexm_app.Utils.TicTacToe
 {
@@ -38,5 +40,64 @@ namespace alexm_app.Utils.TicTacToe
                 return null;
             }
         }
+        public static async Task<bool> IsUsernameAvailable(string username)
+        {
+            using(HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    UriBuilder uriBuilder = new UriBuilder(API_URL + "is_there_player.php");
+                    NameValueCollection query = HttpUtility.ParseQueryString(string.Empty);
+                    query["username"] = username;
+                    uriBuilder.Query = query.ToString();
+                    HttpResponseMessage response = await client.GetAsync(uriBuilder.ToString());
+                    response.EnsureSuccessStatusCode();
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    Dictionary<string, bool>? desirilizedObject = JsonConvert.DeserializeObject<Dictionary<string, bool>>(responseBody);
+                    bool value;
+                    if(desirilizedObject != null && desirilizedObject.TryGetValue("player", out value) == true)
+                    {
+                        return value;
+                    }
+                }
+                catch(Exception e)
+                {
+                    Debug.WriteLine("IsUsernameAvailable " + e.ToString());
+                }
+            }
+            return false;
+        }
+        public static async Task<bool> IsRoomNameAvailable(string roomname)
+        {
+            using(HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    UriBuilder uriBuilder = new UriBuilder(API_URL + "is_there_game.php");
+                    NameValueCollection query = HttpUtility.ParseQueryString(string.Empty);
+                    query["game"] = roomname;
+                    uriBuilder.Query = query.ToString();
+                    HttpResponseMessage response = await client.GetAsync(uriBuilder.ToString());
+                    response.EnsureSuccessStatusCode();
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    Dictionary<string, bool>? deserializedObject = JsonConvert.DeserializeObject<Dictionary<string, bool>>(responseBody);
+                    if(deserializedObject != null)
+                    {
+                        bool value;
+                        if(deserializedObject.TryGetValue("game", out value) == true)
+                        {
+                            return value;
+                        }
+                    }
+                }
+                catch(Exception e)
+                {
+                    Debug.WriteLine($"IsRoomnameAvailable {e}");
+                }
+               
+            }
+            return false;
+        }
     }
+
 }

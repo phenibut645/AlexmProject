@@ -14,8 +14,34 @@ namespace alexm_app.Models
         private Color _backgroundColor = Color.FromRgba("#2b2c36");
         public event OptionChanged onBackgroundColorChange;
 
-        public Color EnemyCell { get; set; } = Color.FromRgba("#ff5447");
-        public Color PlayerCell { get; set; } = Color.FromRgba("#91ff87");
+        private Color _enemyCell = Color.FromRgba("#ff5447");
+        public Color EnemyCell
+            {
+            get
+            {
+                return _enemyCell;
+            }
+            set
+            {
+                _enemyCell = value;
+                OnEnemyCellColorChange?.Invoke(value);
+            }
+            } 
+        public event OptionChanged OnEnemyCellColorChange;
+        public event OptionChanged OnPlayerCellColorChange;
+        private Color _playerCell = Color.FromRgba("#91ff87");
+        public Color PlayerCell
+        {
+            get
+            {
+                return _playerCell;
+            }
+            set
+            {
+                _playerCell = value;
+                OnPlayerCellColorChange?.Invoke(value);
+            }
+        }
         public Color BackgroundColor
         {
             get { return _backgroundColor; }
@@ -81,6 +107,8 @@ namespace alexm_app.Models
             onCellColorChange?.Invoke(CellColor);
             onFrameColorChange?.Invoke(FrameColor);
             onTextColorChanged?.Invoke(TextColor);
+            OnPlayerCellColorChange?.Invoke(PlayerCell);
+            OnEnemyCellColorChange?.Invoke(EnemyCell);
         }
 
         public Theme(Color backgroundColor, Color cellColor, Color textColor, Color frameColor, Color buttonColor)

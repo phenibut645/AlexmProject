@@ -39,7 +39,37 @@ namespace alexm_app
             GameStateService.TicTacToeTheme.onTextColorChanged += Theme_onTextColorChanged;
             GameStateService.TicTacToeTheme.onButtonColorChange += Theme_onButtonColorChange;
             GameStateService.TicTacToeTheme.onFrameColorChange += Theme_onFrameColorChange;
+            GameStateService.TicTacToeTheme.OnPlayerCellColorChange += TicTacToeTheme_OnPlayerCellColorChange;
+            GameStateService.TicTacToeTheme.OnEnemyCellColorChange += TicTacToeTheme_OnEnemyCellColorChange;
             theme.CallEveryEvent();
+        }
+
+        private void TicTacToeTheme_OnEnemyCellColorChange(Color color)
+        {
+            foreach(List<CellButton> row in CellList)
+            {
+                foreach(CellButton cell in row)
+                {
+                    if(cell.Side != null && CurrentEnemySide != null && cell.Side == CurrentEnemySide)
+                    {
+                        cell.BackgroundColor = color;
+                    }
+                }
+            }
+        }
+
+        private void TicTacToeTheme_OnPlayerCellColorChange(Color color)
+        {
+            foreach(List<CellButton> row in CellList)
+            {
+                foreach(CellButton cell in row)
+                {
+                    if(cell.Side != null && CurrentPlayerSide != null && cell.Side == CurrentPlayerSide)
+                    {
+                        cell.BackgroundColor = color;
+                    }
+                }
+            }
         }
 
         private void CancelGameButton_Clicked1(object? sender, EventArgs e)

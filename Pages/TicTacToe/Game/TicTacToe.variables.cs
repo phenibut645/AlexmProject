@@ -27,5 +27,7 @@ namespace alexm_app
         public int DefaultCellsInRow { get; set; } = 2;
         public int DefaultCellsInColumn { get; set; } = 2;
         public int DefaultCellsToWin { get; set; } = 2;
+        public Sides? CurrentEnemySide { get; set; } = null;
+        public Sides? CurrentPlayerSide { get; set; } = null;
     }
 }

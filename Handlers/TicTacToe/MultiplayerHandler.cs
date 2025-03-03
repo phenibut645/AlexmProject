@@ -74,6 +74,8 @@ namespace alexm_app.Services
                 IsGameRunning = true;
                 CurrentPlayer.Side = GetSide(message.Turn);
                 EnemyPlayer.Side = GetSide(!message.Turn);
+                CurrentGamePage.CurrentEnemySide = EnemyPlayer.Side;
+                CurrentGamePage.CurrentPlayerSide = CurrentPlayer.Side;
                 MainThread.InvokeOnMainThreadAsync(() =>
                 {
                     CurrentGamePage.ServerState.Text = $"Connection completed! Your enemy is: {EnemyPlayer.Username}";
@@ -119,6 +121,8 @@ namespace alexm_app.Services
                 EnemyPlayer = new Player(message.PlayerUsername);
                 CurrentPlayer.Side = GetSide(message.Turn);
                 EnemyPlayer.Side = GetSide(!message.Turn);
+                CurrentGamePage.CurrentPlayerSide = CurrentPlayer.Side;
+                CurrentGamePage.CurrentEnemySide = EnemyPlayer.Side;
                 IsGameRunning = true;
                 MainThread.InvokeOnMainThreadAsync(() =>
                 {
