@@ -200,7 +200,7 @@ server.on('connection', (ws) => {
                     if(anotherPlayer){
                         anotherPlayer.client.send(JSON.stringify({"message_type":"Draw"}));
                     }
-                    console.log();
+                    console.log("");
                     
                     break;
                 case "Close":
