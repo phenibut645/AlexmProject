@@ -31,6 +31,7 @@ namespace alexm_app.Utils.TicTacToe
         public static event WebSocketCloseDelegate OnWebSocketClose;
         public static event Action OnPlayerWin;
         public static event Action OnPlayerDisconnect;
+        public static event Action OnDraw;
         
         public static List<ClientMessage> OnReadyMessages { get; private set; } = new List<ClientMessage>();
         private static readonly Uri ServerUri  = new Uri(@"ws://api.aleksandermilisenko23.thkit.ee");
@@ -87,6 +88,7 @@ namespace alexm_app.Utils.TicTacToe
             try
             {
                 await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Close", CancellationToken.None);
+                _webSocket = new ClientWebSocket();
             }
             catch (WebSocketException ex)
             { 
@@ -159,6 +161,9 @@ namespace alexm_app.Utils.TicTacToe
                             break;
                         case "PlayerDisconnected":
                             OnPlayerDisconnect?.Invoke();
+                            break;
+                        case "Draw":
+                            OnDraw?.Invoke();
                             break;
                         default:
                             break;

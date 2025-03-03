@@ -38,6 +38,7 @@ public partial class MultiplayerGuestPage : ContentPage
 		ButtonsContainer.Children.Add(CreateRoomButton);
 		MainContainer.Children.Add(ButtonsContainer);
 		MainContainer.Children.Add(RejoinButton);
+		MainContainer.Children.Add(ReportSender.GetReportButton());
         _ = InitPickerItems();
         InitEventListeners();
         MultiplayerHandler.OnRunningGameClose += MultiplayerHandler_OnRunningGameClose;

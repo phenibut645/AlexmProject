@@ -20,6 +20,6 @@ namespace alexm_app
             new lumimamm(),
             new GuestPage()
         };
-
+        public static ContentPage CurrentPage;
     }
 }

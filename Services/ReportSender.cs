@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Diagnostics;
+using alexm_app.Utils.TicTacToe;
 
 namespace alexm_app.Services
 {
@@ -24,6 +25,21 @@ namespace alexm_app.Services
             catch
             {
                 Debug.WriteLine("Webhook issue");
+            }
+        }
+        public static Button GetReportButton()
+        {
+            Button button = new Button() { Text = "Send a report"};
+            button.Clicked += Button_Clicked;
+            return button;
+        }
+
+        private static async void Button_Clicked(object? sender, EventArgs e)
+        {
+            string response = await Shell.Current.CurrentPage.DisplayPromptAsync("Report", "Send a report");
+            if(response != "")
+            {
+                await SendMessage(response);
             }
         }
     }

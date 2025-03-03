@@ -16,11 +16,11 @@ namespace alexm_app.Services
     {
         public static event Action OnRunningGameClose;
         public static GameConnection? Connection = null;
-        public static bool? IsGameRunning = null;
+        public static bool IsGameRunning = true;
         public static TicTacToePage? CurrentGamePage = null;
         public static Player? EnemyPlayer = null;
         public static Player? CurrentPlayer = null;
-
+        public static bool Win = false;
         public static Sides FirstSideMove = Sides.Cross;
         private static Sides _currentSideMove = FirstSideMove;
         public static Sides CurrentSideMove
@@ -46,6 +46,16 @@ namespace alexm_app.Services
             WebSocketHandler.OnWebSocketClose += WebSocketHandler_OnWebSocketClose;
             WebSocketHandler.OnConnectionComplete += WebSocketHandler_OnConnectionComplete;
             WebSocketHandler.OnPlayerDisconnect += WebSocketHandler_OnPlayerDisconnect;
+            WebSocketHandler.OnDraw += WebSocketHandler_OnDraw;
+        }
+
+        private static void WebSocketHandler_OnDraw()
+        {
+            IsGameRunning = false;
+            MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                CurrentGamePage.ServerState.Text = $"Draw!";
+            });
         }
 
         private static void WebSocketHandler_OnPlayerDisconnect()
@@ -60,6 +70,7 @@ namespace alexm_app.Services
         {
             if(EnemyPlayer != null && CurrentPlayer != null)
             {
+                IsGameRunning = true;
                 CurrentPlayer.Side = GetSide(message.Turn);
                 EnemyPlayer.Side = GetSide(!message.Turn);
                 MainThread.InvokeOnMainThreadAsync(() =>
@@ -94,6 +105,7 @@ namespace alexm_app.Services
                 {
                     CellButton cell = CurrentGamePage.GetCellButton(message.X, message.Y);
                     cell.Closed = true;
+                    cell.Side = EnemyPlayer.Side;
                     CurrentGamePage.ColourCell((Sides)EnemyPlayer.Side, true, cell);
                 });
             }
@@ -106,6 +118,7 @@ namespace alexm_app.Services
                 EnemyPlayer = new Player(message.PlayerUsername);
                 CurrentPlayer.Side = GetSide(message.Turn);
                 EnemyPlayer.Side = GetSide(!message.Turn);
+                IsGameRunning = true;
                 MainThread.InvokeOnMainThreadAsync(() =>
                 {
                     CurrentGamePage.ServerState.Text = $"{EnemyPlayer.Username} connected";
@@ -125,7 +138,11 @@ namespace alexm_app.Services
 
         private static void WebSocketHandler_OnPlayerWin()
         {
-            
+            IsGameRunning = false;
+            MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                CurrentGamePage.ServerState.Text = $"{EnemyPlayer.Username} won!";
+            });
         }
         public static void Rejoin()
         {
@@ -183,7 +200,7 @@ namespace alexm_app.Services
             GameStateService.SavedPlayerInfo = CurrentPlayer;
             GameStateService.Reset();
             Connection = null;
-            IsGameRunning = null;
+            IsGameRunning = false;
             CurrentGamePage = null;
             EnemyPlayer = null;
             CurrentPlayer = null;
@@ -194,20 +211,105 @@ namespace alexm_app.Services
         {
             
         }
+        private static bool IsThereFreeCellInArea()
+        {
+            foreach(List<CellButton> row in CurrentGamePage.CellList)
+            {
+                foreach(CellButton cell in row)
+                {
+                    if (!cell.Closed)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        private static bool IsItWinMove(CellButton cell)
+        {
+            int count = 0;
+            int count2 = 0;
+            for(int row = 0; row < 3; row++)
+            {
+                for(int col = 0; col < 3; col++)
+                {
+                    if (CurrentGamePage.CellList[row][col].Side == CurrentPlayer.Side)
+                    {
+                        count++;
+                    }
+                    if (CurrentGamePage.CellList[col][row].Side == CurrentPlayer.Side)
+                    {
+                        count2++;
+                    }
+                }
+                if(count == 3 || count2 == 3)
+                {
+
+                    return true;
+                }
+                else 
+                {
+                    count = 0;
+                    count2 = 0;
+                }
+            }
+            count = 0;
+            count2 = 0;
+
+            int column = 0;
+            for(int row = 0; row < 3; row++)
+            {
+                if (CurrentGamePage.CellList[row][column].Side == CurrentPlayer.Side)
+                {
+                    count++;
+                }
+                if (CurrentGamePage.CellList[row][2 - column].Side == CurrentPlayer.Side)
+                {
+                    count2++;
+                }
+                column++;
+            }
+            if(count == 3 || count2 == 3)
+            {
+                return true;
+            }
+            return false;
+        }
 
         private static async void CurrentGamePage_OnCellClick(CellButton cell)
         {
+            if(!IsGameRunning) return;
             if(WebSocketHandler.GetWebSocketState() == System.Net.WebSockets.WebSocketState.Open)
             {
                 if(CurrentPlayer != null && CurrentSideMove == CurrentPlayer.Side && !cell.Closed && cell.CellInGameArea != null && CurrentPlayer.Side != null)
                 {
-                    _ = MainThread.InvokeOnMainThreadAsync(() =>
+                    
+                    await MainThread.InvokeOnMainThreadAsync(() =>
                     {
                         CurrentGamePage.ColourCell((Sides)CurrentPlayer.Side, false, cell);
                     });
                     cell.Closed = true;
+                    cell.Side = CurrentPlayer.Side;
                     CurrentSideMove = (Sides)EnemyPlayer.Side;
                     await WebSocketHandler.SendMessage(new PlayerMove() { X = cell.CellInGameArea.X , Y = cell.CellInGameArea.Y });
+                    if (IsItWinMove(cell))
+                    {
+                        IsGameRunning = false;
+                        await MainThread.InvokeOnMainThreadAsync(() =>
+                        {
+                            CurrentGamePage.ServerState.Text = "You won!";
+                        });
+                        await WebSocketHandler.SendMessage(new PlayerWon());
+                    }
+                    else if (!IsThereFreeCellInArea())
+                    {
+                        IsGameRunning = false;
+                        await MainThread.InvokeOnMainThreadAsync(() =>
+                        {
+                            CurrentGamePage.ServerState.Text = "Draw!";
+                        });
+                        await WebSocketHandler.SendMessage(new Draw());
+                    }
                 }
             }
         }
