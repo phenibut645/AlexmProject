@@ -11,7 +11,7 @@ public partial class CreateRoom : ContentPage
 	public Label RoomNameLabel { get; set; } = new Label() { Text = "Room name"};
 	public Entry RoomNameEntry { get; set; } = new Entry();
 	public VerticalStackLayout AreaSizeMultiplyContainer { get; set; } = new VerticalStackLayout();
-	public Label AreaSizeMultiplyLabel { get; set; } = new Label();
+	public Label AreaSizeMultiplyLabel { get; set; } = new Label() { Text = "How many cells in rows and columns: 1"};
 	public Slider AreaSizeMultiplySlider { get; set; } = new Slider() { Minimum = 1, Maximum = 5 };
 	public Button CreateButton { get; set; } = new Button() { Text = "Create" };
 
@@ -25,7 +25,7 @@ public partial class CreateRoom : ContentPage
 		AreaSizeMultiplyContainer.Children.Add(AreaSizeMultiplyLabel);
 		AreaSizeMultiplyContainer.Children.Add(AreaSizeMultiplySlider);
 		MainContainer.Children.Add(RoomNameContainer);
-		MainContainer.Children.Add(AreaSizeMultiplySlider);
+		MainContainer.Children.Add(AreaSizeMultiplyContainer);
 		MainContainer.Children.Add(CreateButton);
         AreaSizeMultiplySlider.ValueChanged += AreaSizeMultiplySlider_ValueChanged;
         CreateButton.Clicked += CreateButton_Clicked;
@@ -50,6 +50,8 @@ public partial class CreateRoom : ContentPage
 		{
 			int value = (int)Math.Round(slider.Value);
 			Value = value;
+			AreaSizeMultiplyLabel.Text = $"How many cells in rows and columns: {Value}";
+			Debug.WriteLine(Value);
 		}
     }
 }

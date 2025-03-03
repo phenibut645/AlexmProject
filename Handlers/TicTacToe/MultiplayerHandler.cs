@@ -177,7 +177,7 @@ namespace alexm_app.Services
             Connection = GameConnection.Create;
             CurrentPlayer = new Player(username);
             Debug.WriteLine($"username: {username}, room: {room}");
-            WebSocketHandler.OnReadyMessages.Add(new InitialCreateMessage() { RoomName = room, Username = username });
+            WebSocketHandler.OnReadyMessages.Add(new InitialCreateMessage() { RoomName = room, Username = username, Size = size });
             SizeMap = size;
             CurrentGamePage = new TicTacToePage(PageCreated, size);
             await GameStateService.Navigation.PushAsync(CurrentGamePage);

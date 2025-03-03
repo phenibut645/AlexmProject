@@ -20,13 +20,14 @@ public partial class TicTacToePage : ContentPage
 		MainContainer.Children.Add(CancelGameButton);
         ThemePicker = GameService.GetThemePicker();
 		MainContainer.Children.Add(ThemePicker);
+		DefaultCellsInRow += size;
+		DefaultCellsInColumn += size;
+		DefaultCellsToWin += size;
 		InitGameArea();
 		AddEventListeners();
 		GameStateService.TicTacToeTheme.CallEveryEvent();
 
-		DefaultCellsInRow += size;
-		DefaultCellsInColumn += size;
-		DefaultCellsToWin += size;
+		
 
 		Task.Run(async () => {
 			await onPageCreated();
