@@ -54,10 +54,11 @@ namespace alexm_app.Utils.TicTacToe
                     response.EnsureSuccessStatusCode();
                     string responseBody = await response.Content.ReadAsStringAsync();
                     Dictionary<string, bool>? desirilizedObject = JsonConvert.DeserializeObject<Dictionary<string, bool>>(responseBody);
+                    Debug.WriteLine($"username available response: {responseBody}");
                     bool value;
                     if(desirilizedObject != null && desirilizedObject.TryGetValue("player", out value) == true)
                     {
-                        return value;
+                        return !value;
                     }
                 }
                 catch(Exception e)
@@ -75,18 +76,19 @@ namespace alexm_app.Utils.TicTacToe
                 {
                     UriBuilder uriBuilder = new UriBuilder(API_URL + "is_there_game.php");
                     NameValueCollection query = HttpUtility.ParseQueryString(string.Empty);
-                    query["game"] = roomname;
+                    query["room"] = roomname;
                     uriBuilder.Query = query.ToString();
                     HttpResponseMessage response = await client.GetAsync(uriBuilder.ToString());
                     response.EnsureSuccessStatusCode();
                     string responseBody = await response.Content.ReadAsStringAsync();
                     Dictionary<string, bool>? deserializedObject = JsonConvert.DeserializeObject<Dictionary<string, bool>>(responseBody);
+                    Debug.WriteLine($"game available response: {responseBody}");
                     if(deserializedObject != null)
                     {
                         bool value;
                         if(deserializedObject.TryGetValue("game", out value) == true)
                         {
-                            return value;
+                            return !value;
                         }
                     }
                 }

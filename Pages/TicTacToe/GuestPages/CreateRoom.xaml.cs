@@ -38,7 +38,7 @@ public partial class CreateRoom : ContentPage
 			await this.DisplayAlert("Error", "Type the name of room", "ok");
 			return;
 		}
-		else if (await DatabaseHandler.IsRoomNameAvailable(RoomNameEntry.Text))
+		else if (!(await DatabaseHandler.IsRoomNameAvailable(RoomNameEntry.Text)))
 		{
 			await this.DisplayAlert("Error", "This name isn't available", "ok");
 			return;

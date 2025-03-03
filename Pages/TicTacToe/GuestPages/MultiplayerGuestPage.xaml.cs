@@ -56,6 +56,11 @@ public partial class MultiplayerGuestPage : ContentPage
 		RefreshPicker.Clicked += RefreshPicker_Clicked;
         JoinRoomButton.Clicked += async (object? sender, EventArgs e) =>
 		{
+			if(!(await DatabaseHandler.IsUsernameAvailable(UsernameEntry.Text)))
+			{
+				await DisplayAlert("Alert", "This username isn't available!", "OK");
+				return;
+			}
 			if(RoomPicker.SelectedIndex == -1 || UsernameEntry.Text == "") await DisplayAlert("Alert", "Some entries is empty!", "OK");
 			else if(Games == null) await DisplayAlert("Alert", "There's no available room", "OK");
 			else await MultiplayerHandler.JoinPlayer(UsernameEntry.Text, Games[RoomPicker.SelectedIndex]);
@@ -63,7 +68,7 @@ public partial class MultiplayerGuestPage : ContentPage
 		CreateRoomButton.Clicked += async (object? sender, EventArgs e) =>
 		{
 			if(UsernameEntry.Text == "") await DisplayAlert("Alert", "Some entries is empty!", "OK");
-			else if(await DatabaseHandler.IsUsernameAvailable(UsernameEntry.Text))
+			else if(!(await DatabaseHandler.IsUsernameAvailable(UsernameEntry.Text)))
 			{
 				await DisplayAlert("Alert", "This username isn't available!", "OK");
 			}
