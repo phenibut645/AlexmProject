@@ -20,5 +20,7 @@ namespace alexm_app.Models.TicTacToe.ServerMessages
 
         [JsonProperty("username")]
         public string Username { get; set; }
+        [JsonProperty("size")]
+        public int Size { get; set; }
     }
 }

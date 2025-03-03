@@ -10,7 +10,7 @@ namespace alexm_app;
 public partial class TicTacToePage : ContentPage
 {
 	public delegate Task AsyncPageCreate();
-	public TicTacToePage(AsyncPageCreate onPageCreated)
+	public TicTacToePage(AsyncPageCreate onPageCreated, int size)
 	{
 		Content = MainContainer;
 		MainContainer.Children.Add(ServerState);
@@ -18,10 +18,15 @@ public partial class TicTacToePage : ContentPage
 		MainContainer.Children.Add(CurrentSide);
 		MainContainer.Children.Add(PlayerSide);
 		MainContainer.Children.Add(CancelGameButton);
-        
+        ThemePicker = GameService.GetThemePicker();
+		MainContainer.Children.Add(ThemePicker);
 		InitGameArea();
 		AddEventListeners();
 		GameStateService.TicTacToeTheme.CallEveryEvent();
+
+		DefaultCellsInRow += size;
+		DefaultCellsInColumn += size;
+		DefaultCellsToWin += size;
 
 		Task.Run(async () => {
 			await onPageCreated();

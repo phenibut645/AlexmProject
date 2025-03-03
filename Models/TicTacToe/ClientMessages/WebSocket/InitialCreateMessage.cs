@@ -15,7 +15,7 @@ namespace alexm_app.Models.TicTacToe.ClientMessages.WebSocket
         public string RoomName { get; set;}
         [JsonProperty("username")]
         public string Username { get; set; }
-
-
+        [JsonProperty("size")]
+        public int Size { get; set; }
     }
 }

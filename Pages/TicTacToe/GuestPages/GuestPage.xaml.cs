@@ -16,12 +16,8 @@ public partial class GuestPage : ContentPage
 	// при игре в одиночную игру, нужен выбор того, кто ходит первый.
 
 	public VerticalStackLayout MainContainer = new VerticalStackLayout();
-	public Picker ThemePicker = new Picker() { Title = "Select a theme"};
-	public List<Theme> Themes = new List<Theme>()
-	{
-		new Theme(),
-		new Theme(Color.FromArgb("#c9ffe6"), Color.FromArgb("#b0faff"), Color.FromArgb("#f0f0f0"), Color.FromArgb("#8c73bd"), Color.FromArgb("#adff9e")) { Name = "Banana theme" }
-	};
+	public Picker ThemePicker;
+	
 	public Button SinglePlayerButton = new Button() { Text = "Single player" };
 	public Button MultiplayerButton = new Button() { Text = "Multiplayer" };
 	public Label SizeOfGameAreaLabel = new Label() { Text = "Size of game area"};
@@ -32,11 +28,9 @@ public partial class GuestPage : ContentPage
 	public GuestPage()
 	{
 		this.Content = MainContainer;
-
+		ThemePicker = GameService.GetThemePicker();
 		List<IView> componentChronology = new List<IView>() { HeaderGif, ThemePicker, SizeOfGameAreaLabel, SizeOfGameAreaSlider, SinglePlayerButton, MultiplayerButton };
 		foreach (IView component in componentChronology) MainContainer.Children.Add(component);
-
-		InitThemePicker();
 		InitEventListeners();
 		InitRejoinButton();
 
@@ -67,20 +61,9 @@ public partial class GuestPage : ContentPage
         onPageLeave();
     }
 
-    private void InitThemePicker()
-	{
-		List<string> themesName = new List<string>();
-		foreach(Theme theme in Themes)
-		{
-			themesName.Add(theme.Name);
-		}
-		ThemePicker.ItemsSource = themesName;
-		ThemePicker.SelectedIndex = 0;
-	}
-
 	private void onPageLeave()
 	{
-		GameStateService.TicTacToeTheme = Themes[ThemePicker.SelectedIndex];
+		GameStateService.TicTacToeTheme = GameService.Themes[ThemePicker.SelectedIndex];
 		GameStateService.TicTacToeSizeOfMapMultiply = SizeOfGameAreaSlider.Value;
 	}
 }

@@ -23,5 +23,9 @@ namespace alexm_app
         public Label ServerState { get; set; } = new Label();
         public Label CurrentSide { get; set; } = new Label();
         public Label PlayerSide { get; set; } =  new Label();
+        public Picker ThemePicker { get; set; } 
+        public int DefaultCellsInRow { get; set; } = 2;
+        public int DefaultCellsInColumn { get; set; } = 2;
+        public int DefaultCellsToWin { get; set; } = 2;
     }
 }

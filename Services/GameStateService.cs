@@ -55,6 +55,8 @@ namespace alexm_app.Utils.TicTacToe
         public static Player? EnemyPlayer { get; set; } = null;
         public static GameConnection? GameConnection { get; set; } = null;
         public static Player? SavedPlayerInfo { get; set; } = null;
+        public static string? Username { get; set; } = null;
+        
 
         public static void Reset()
         {

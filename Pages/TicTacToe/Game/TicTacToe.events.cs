@@ -22,12 +22,24 @@ namespace alexm_app
         public event Action OnGameCancel;
         private void AddEventListeners()
 	    {
+            GameStateService.OnThemeChange += GameStateService_OnThemeChange;
             GameStateService.TicTacToeTheme.onBackgroundColorChange += Theme_onBackgroundColorChange;
             GameStateService.TicTacToeTheme.onCellColorChange += Theme_onCellColorChange;
             GameStateService.TicTacToeTheme.onTextColorChanged += Theme_onTextColorChanged;
             GameStateService.TicTacToeTheme.onButtonColorChange += Theme_onButtonColorChange;
             GameStateService.TicTacToeTheme.onFrameColorChange += Theme_onFrameColorChange;
+
             CancelGameButton.Clicked += CancelGameButton_Clicked1;
+        }
+
+        private void GameStateService_OnThemeChange(Models.Theme theme)
+        {
+            GameStateService.TicTacToeTheme.onBackgroundColorChange += Theme_onBackgroundColorChange;
+            GameStateService.TicTacToeTheme.onCellColorChange += Theme_onCellColorChange;
+            GameStateService.TicTacToeTheme.onTextColorChanged += Theme_onTextColorChanged;
+            GameStateService.TicTacToeTheme.onButtonColorChange += Theme_onButtonColorChange;
+            GameStateService.TicTacToeTheme.onFrameColorChange += Theme_onFrameColorChange;
+            theme.CallEveryEvent();
         }
 
         private void CancelGameButton_Clicked1(object? sender, EventArgs e)
@@ -37,12 +49,12 @@ namespace alexm_app
 
         private void Theme_onFrameColorChange(Color color)
         {
-
+            GameArea.BackgroundColor = color;
         }
 
         private void Theme_onButtonColorChange(Color color)
         {
-            
+            CancelGameButton.BackgroundColor = color;
         }
 
         private void Theme_onTextColorChanged(Color color)

@@ -2,6 +2,7 @@ using alexm_app.Models.TicTacToe.ServerMessages;
 using alexm_app.Services;
 using alexm_app.Utils.TicTacToe;
 using System.Diagnostics;
+using alexm_app.Pages.TicTacToe.GuestPages;
 
 namespace alexm_app;
 
@@ -64,12 +65,8 @@ public partial class MultiplayerGuestPage : ContentPage
 			if(UsernameEntry.Text == "") await DisplayAlert("Alert", "Some entries is empty!", "OK");
 			else
 			{
-				string response = await Application.Current.MainPage.DisplayPromptAsync("Create a room", "Room name", "OK", "Cancel", "", 100, keyboard: Keyboard.Default);
-				if(response != null && response != "")
-				{
-					Debug.WriteLine("Creating game...");
-					await MultiplayerHandler.CreateRoom(response, UsernameEntry.Text);
-				}
+				GameStateService.Username = UsernameEntry.Text;
+				await Navigation.PushAsync(new CreateRoom());
 			}
 		};
 	}

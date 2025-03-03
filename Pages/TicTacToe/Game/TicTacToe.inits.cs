@@ -15,15 +15,15 @@ namespace alexm_app
     {
         private void InitGameArea()
         {
-            for(int i = 0; i < 3; i++)
+            for(int i = 0; i < DefaultCellsInColumn; i++)
             {
                 GameArea.RowDefinitions.Add(new RowDefinition() { Height = (int)Math.Round(50 * GameStateService.TicTacToeSizeOfMapMultiply) });
                 GameArea.ColumnDefinitions.Add(new ColumnDefinition() {Width = (int)Math.Round(50 * GameStateService.TicTacToeSizeOfMapMultiply) } );
             }
-            for(int row = 0; row < 3; row++)
+            for(int row = 0; row < DefaultCellsInRow; row++)
             {
                 CellList.Add(new List<CellButton>());
-                for(int col = 0; col < 3; col++)
+                for(int col = 0; col < DefaultCellsInColumn; col++)
                 {
                     CellButton button = new CellButton();
                     button.CellInGameArea = new Cell() { Y = row, X = col };

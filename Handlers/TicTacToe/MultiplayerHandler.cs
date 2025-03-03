@@ -23,6 +23,7 @@ namespace alexm_app.Services
         public static bool Win = false;
         public static Sides FirstSideMove = Sides.Cross;
         private static Sides _currentSideMove = FirstSideMove;
+        private static int? SizeMap = null;
         public static Sides CurrentSideMove
         {
             get { return _currentSideMove; }
@@ -164,18 +165,21 @@ namespace alexm_app.Services
             EnemyPlayer = new Player(game.Username) { Id = game.PlayerId };
             CurrentPlayer = new Player(username);
             WebSocketHandler.OnReadyMessages.Add(new InitialJoinMessage() { RoomName = game.RoomName, Username = username });
-            CurrentGamePage = new TicTacToePage(PageCreated);
+            CurrentGamePage = new TicTacToePage(PageCreated, game.Size);
+            SizeMap = game.Size;
             _ = MainThread.InvokeOnMainThreadAsync(()=>{
                 CurrentGamePage.ServerState.Text = $"Connection to {EnemyPlayer.Username}...";
                 });
             await GameStateService.Navigation.PushAsync(CurrentGamePage);
         }
-        public static async Task CreateRoom(string username, string room)
+        public static async Task CreateRoom(string username, string room, int size)
         {
             Connection = GameConnection.Create;
             CurrentPlayer = new Player(username);
+            Debug.WriteLine($"username: {username}, room: {room}");
             WebSocketHandler.OnReadyMessages.Add(new InitialCreateMessage() { RoomName = room, Username = username });
-            CurrentGamePage = new TicTacToePage(PageCreated);
+            SizeMap = size;
+            CurrentGamePage = new TicTacToePage(PageCreated, size);
             await GameStateService.Navigation.PushAsync(CurrentGamePage);
         }
         public static async Task PageCreated()
@@ -239,9 +243,9 @@ namespace alexm_app.Services
         {
             int count = 0;
             int count2 = 0;
-            for(int row = 0; row < 3; row++)
+            for(int row = 0; row < CurrentGamePage.DefaultCellsInRow; row++)
             {
-                for(int col = 0; col < 3; col++)
+                for(int col = 0; col < CurrentGamePage.DefaultCellsInColumn; col++)
                 {
                     if (CurrentGamePage.CellList[row][col].Side == CurrentPlayer.Side)
                     {
@@ -252,7 +256,7 @@ namespace alexm_app.Services
                         count2++;
                     }
                 }
-                if(count == 3 || count2 == 3)
+                if(count == CurrentGamePage.DefaultCellsToWin || count2 == CurrentGamePage.DefaultCellsToWin)
                 {
 
                     return true;
@@ -267,19 +271,19 @@ namespace alexm_app.Services
             count2 = 0;
 
             int column = 0;
-            for(int row = 0; row < 3; row++)
+            for(int row = 0; row < CurrentGamePage.DefaultCellsInRow; row++)
             {
                 if (CurrentGamePage.CellList[row][column].Side == CurrentPlayer.Side)
                 {
                     count++;
                 }
-                if (CurrentGamePage.CellList[row][2 - column].Side == CurrentPlayer.Side)
+                if (CurrentGamePage.CellList[row][CurrentGamePage.DefaultCellsInColumn - 1 - column].Side == CurrentPlayer.Side)
                 {
                     count2++;
                 }
                 column++;
             }
-            if(count == 3 || count2 == 3)
+            if(count == CurrentGamePage.DefaultCellsToWin || count2 == CurrentGamePage.DefaultCellsToWin)
             {
                 return true;
             }
