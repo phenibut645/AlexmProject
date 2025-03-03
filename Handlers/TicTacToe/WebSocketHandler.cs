@@ -56,7 +56,6 @@ namespace alexm_app.Utils.TicTacToe
 
                 WebSocketReceiveResult result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                 string receivedMessage = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                Debug.WriteLine(receivedMessage);
                 dynamic? message = JsonConvert.DeserializeObject(receivedMessage);
                 if(message != null && message?.message_type != null)
                 {
@@ -106,11 +105,9 @@ namespace alexm_app.Utils.TicTacToe
             var buffer = new byte[1024];
             while (!Token.IsCancellationRequested || _webSocket.State == WebSocketState.Open)
             {
-                Debug.WriteLine("hoow");
                 try
                 {
                     var result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), Token);
-                    Debug.WriteLine("yessir");
                     if (result.MessageType == WebSocketMessageType.Text)
                     {
                         string json = Encoding.UTF8.GetString(buffer, 0, result.Count);

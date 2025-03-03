@@ -14,7 +14,7 @@ namespace alexm_app.Services
 	    {
 		    new Theme(),
 		    new Theme(Color.FromArgb("#c9ffe6"), Color.FromArgb("#b0faff"), Color.FromArgb("#f0f0f0"), Color.FromArgb("#8c73bd"), Color.FromArgb("#adff9e")) { Name = "Banana theme" },
-            new Theme(Color.FromArgb("#210000"), Color.FromArgb("#423333"), Color.FromArgb("#1c1b1b"), Color.FromArgb("#20004a"), Color.FromArgb("#d10046")) {Name = "Bloody"}
+            new Theme(Color.FromArgb("#210000"), Color.FromArgb("#423333"), Color.FromArgb("#ffffff"), Color.FromArgb("#20004a"), Color.FromArgb("#d10046")) {Name = "Bloody"}
 	    };
         public static Picker GetThemePicker()
         {

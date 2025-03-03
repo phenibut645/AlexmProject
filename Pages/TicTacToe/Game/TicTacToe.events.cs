@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -95,6 +96,9 @@ namespace alexm_app
                     cell.TextColor = color;
                 }
             }
+            ServerState.TextColor = color;
+            CurrentSide.TextColor = color;
+            PlayerSide.TextColor = color;
         }
 
         private void Theme_onCellColorChange(Color color)
