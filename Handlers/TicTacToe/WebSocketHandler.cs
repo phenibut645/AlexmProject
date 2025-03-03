@@ -64,6 +64,7 @@ namespace alexm_app.Utils.TicTacToe
                             Debug.WriteLine(JsonConvert.SerializeObject(clientMessage));
                             await SendMessage(clientMessage);
                         } 
+                        OnReadyMessages.Clear();
                             
 
                         Debug.WriteLine($"Adding listener for messages... {_webSocket.State}");

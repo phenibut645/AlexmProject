@@ -173,7 +173,7 @@ namespace alexm_app.Services
         public static async Task CreateRoom(string username, string room)
         {
             Connection = GameConnection.Create;
-            CurrentPlayer = new Player("username");
+            CurrentPlayer = new Player(username);
             WebSocketHandler.OnReadyMessages.Add(new InitialCreateMessage() { RoomName = room, Username = username });
             CurrentGamePage = new TicTacToePage(PageCreated);
             await GameStateService.Navigation.PushAsync(CurrentGamePage);
@@ -196,15 +196,25 @@ namespace alexm_app.Services
         private static async void CurrentGamePage_OnGameCancel()
         {
             await WebSocketHandler.Close();
+            Debug.WriteLine("lol");
             await GameStateService.Navigation.PopAsync();
+            Debug.WriteLine("lol1");
             GameStateService.SavedPlayerInfo = CurrentPlayer;
+            Debug.WriteLine("lol2");
             GameStateService.Reset();
+            Debug.WriteLine("lol3");
             Connection = null;
+            Debug.WriteLine("lol4");
             IsGameRunning = false;
+            Debug.WriteLine("lol5");
             CurrentGamePage = null;
+            Debug.WriteLine("lol6");
             EnemyPlayer = null;
+            Debug.WriteLine("lol7");
             CurrentPlayer = null;
+            Debug.WriteLine("lol8");
             _currentSideMove = FirstSideMove;
+            Debug.WriteLine("lol9");
         }
 
         private static void CurrentGamePage_OnGameAreaCreate()
