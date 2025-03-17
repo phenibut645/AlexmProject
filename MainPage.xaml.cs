@@ -4,7 +4,7 @@ namespace alexm_app;
 
 public partial class MainPage : ContentPage
 {
-    public List<string> Texts { get; set; } = new List<string> { "Tee lahti ValgusfoorPage", "Izitizer on the beat", "Lumememm", "Tic-Tac-Toe" };
+    public List<string> Texts { get; set; } = new List<string> { "Tee lahti ValgusfoorPage", "Izitizer on the beat", "Lumememm", "Tic-Tac-Toe", "Friends" };
     ScrollView ScrollContainer { get; set; }
     VerticalStackLayout MainContainer { get; set; }
     public MainPage()

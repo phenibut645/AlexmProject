@@ -1,6 +1,7 @@
 ﻿using alexm_app.Enums.TicTacToe;
 using alexm_app.Models;
 using alexm_app.Models.TicTacToe;
+using alexm_app.Pages.Friends;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,9 @@ namespace alexm_app
             new ValgusfoorPage(),
             new rgb_page(),
             new lumimamm(),
-            new GuestPage()
+            new GuestPage(),
+            new FriendsPage()
+
         };
         public static ContentPage CurrentPage;
     }
