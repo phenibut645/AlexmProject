@@ -1,6 +1,7 @@
 ﻿using alexm_app.Enums.TicTacToe;
 using alexm_app.Models;
 using alexm_app.Models.TicTacToe;
+using alexm_app.Pages.Countries;
 using alexm_app.Pages.Friends;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,8 @@ namespace alexm_app
             new rgb_page(),
             new lumimamm(),
             new GuestPage(),
-            new FriendsPage()
+            new FriendsPage(),
+            new CountriesPage()
 
         };
         public static ContentPage CurrentPage;
