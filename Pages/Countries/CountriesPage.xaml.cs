@@ -84,7 +84,7 @@ public partial class CountriesPage : ContentPage
     private void ChangeName(string name, string newName)
     {
         int index = GetIndexByName(name);
-        if (index != -1) ListItems[index].Name = newName; // Теперь будет обновляться UI
+        if (index != -1) ListItems[index].Name = newName;
     }
 
 
