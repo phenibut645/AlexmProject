@@ -145,7 +145,7 @@ namespace alexm_app.Pages.Friends
 
             try
             {
-                FileResult file = await FilePicker.PickAsync(new PickOptions
+                FileResult? file = await FilePicker.PickAsync(new PickOptions
                 {
                     PickerTitle = "Vali pilt",
                     FileTypes = FilePickerFileType.Images
