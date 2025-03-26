@@ -75,6 +75,9 @@
 	  <MauiXaml Update="Pages\Countries\CountriesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Countries\ForeignPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\TicTacToe\GuestPages\CreateRoom.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
