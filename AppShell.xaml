@@ -4,12 +4,36 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:alexm_app"
-    Shell.FlyoutBehavior="Flyout"
+    Shell.FlyoutBehavior="Disabled"
     Title="alexm_app">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+
+    <TabBar>
+        <ShellContent
+            Title="Valgusfoor"
+            ContentTemplate="{DataTemplate local:ValgusfoorPage}"
+            Icon="{OnPlatform 'traffic_light.png', iOS='traffic_light.png', MacCatalyst='traffic_light.png'}" />
+
+        <ShellContent
+            Title="TicTacToe"
+            ContentTemplate="{DataTemplate local:GuestPage}"
+            Icon="{OnPlatform 'tictactoe.png', iOS='tictactoe.png', MacCatalyst='tictactoe.png'}" />
+        <ShellContent
+            Title="Countries"
+            ContentTemplate="{DataTemplate local:Pages.Countries.CountriesPage}"
+            Icon="{OnPlatform 'citizenship.png', iOS='citizenship.png', MacCatalyst='citizenship.png'}" />
+        <ShellContent
+            Title="Friends"
+            ContentTemplate="{DataTemplate local:Pages.Friends.FriendsPage}"
+            Icon="{OnPlatform 'friends.png', iOS='friends.png', MacCatalyst='friends.png'}" />
+        <ShellContent
+            Title="Snowman"
+            ContentTemplate="{DataTemplate local:lumimamm}"
+            Icon="{OnPlatform 'snowman.png', iOS='snowman.png', MacCatalyst='snowman.png'}" />
+        <ShellContent
+            Title="RGB"
+            ContentTemplate="{DataTemplate local:rgb_page}"
+            Icon="{OnPlatform 'color_circles.png', iOS='color_circles.png', MacCatalyst='color_circles.png'}" />
+    </TabBar>
 
 </Shell>
